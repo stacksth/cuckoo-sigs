@@ -10,14 +10,15 @@ class InstallsWinpcap(Signature):
     authors = ["Thomas Birn"]
     minimum = "0.4.2"
 	
-    files = [
-                ".*\\\\packet.dll",
-                ".*\\\\npf.sys",
-		".*\\\\wpcap.dll",
-	
-	]
+
 
     def run(self, results):
+        files = [
+                ".*\\\\packet.dll",
+                ".*\\\\npf.sys",
+		".*\\\\wpcap.dll"	
+	]
+        
         for file_name in results["behavior"]["summary"]["files"]:
             for indicator in files:
                 regexp = re.compile(indicator, re.IGNORECASE)
