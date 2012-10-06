@@ -17,8 +17,8 @@ import re
 
 from lib.cuckoo.common.abstracts import Signature
 
-class DisableTaskRegedit(Signature):
-    name = "disabletaskregedit"
+class DisableRegedit(Signature):
+    name = "disableregedit"
     description = "Disables Windows registry editor"
     severity = 3
     categories = ["generic"]
@@ -27,15 +27,18 @@ class DisableTaskRegedit(Signature):
 
     def run(self, results):
         indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
-        value = "disableregistrytools"
 
         for key in results["behavior"]["summary"]["keys"]:
             regexp = re.compile(indicator, re.IGNORECASE)
-            if regexp.match(key):                    
+            if regexp.match(key):                    	
                 for process in results["behavior"]["processes"]:
-                    for call in process["calls"]:				
+
+                    for call in process["calls"]:
+                        if call["category"] != "registry":
+                            continue
+
                         for argument in call["arguments"]:
-                            if value == argument['value']:
-                                self.data.append({"value" : value})
+                            if argument["value"] == "disableregistrytools":
                                 return True
+
         return False

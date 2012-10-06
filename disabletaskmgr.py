@@ -27,16 +27,18 @@ class DisableTaskMgr(Signature):
 
     def run(self, results):
         indicator = ".*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System"
-	value = "DisableTaskMgr"
 
         for key in results["behavior"]["summary"]["keys"]:
             regexp = re.compile(indicator, re.IGNORECASE)
             if regexp.match(key):                    	
                 for process in results["behavior"]["processes"]:
-                    for call in process["calls"]:				
-                        for argument in call["arguments"]:						
-                            if value == argument['value']:
-                                self.data.append({"value" : value})
+
+                    for call in process["calls"]:
+                        if call["category"] != "registry":
+                            continue
+
+                        for argument in call["arguments"]:
+                            if argument["value"] == "DisableTaskMgr":
                                 return True
 
         return False
