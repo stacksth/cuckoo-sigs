@@ -38,7 +38,7 @@ class DisableRegedit(Signature):
                             continue
 
                         for argument in call["arguments"]:
-                            if argument["value"] == "disableregistrytools":
+                            if argument["value"] == "DisableRegistryTools":
                                 return True
 
         return False
