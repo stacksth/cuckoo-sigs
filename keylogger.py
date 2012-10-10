@@ -29,6 +29,7 @@ class Keylogger(Signature):
                 if call["api"].startswith("SetWindowsHookExA"):
                     for argument in call["arguments"]:
                         if argument["name"] == "HookIdentifier" and (argument["value"] == "2" or argument["value"] == "13"):
+                            self.data.append({"HookIdentifier" : argument["value"]})
                             return True
 
         return False

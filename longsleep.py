@@ -29,6 +29,7 @@ class LongSleep(Signature):
                 if call["api"].startswith("NtDelayExecution"):
                     for argument in call["arguments"]:
                         if argument["name"] == "Milliseconds" and int(argument["value"]) > 300000:
+                            self.data.append({"Milliseconds" : argument["value"]})
                             return True
 
         return False
